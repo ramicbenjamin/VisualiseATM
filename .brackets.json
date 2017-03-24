@@ -1,0 +1,6 @@
+{
+    "jscodehints.detectedExclusions": [
+        "C:/xampp/htdocs/public/lib/d3.min.js",
+        "C:/xampp/htdocs/public/lib/angular.min.js"
+    ]
+}
