@@ -21,6 +21,12 @@
 </table>
 <br>
 <h3 class="center">Svi bankomati na mapi:</h3>
-<div class="google-maps center">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2838.676018759399!2d17.972677469016887!3d44.6445382332987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x475e86464bb625eb%3A0xe70bf6410550f5c8!2sVukovo!5e0!3m2!1sbs!2sba!4v1431438034203" width="600" height="300" frameborder="0" style="border:0"></iframe>
-</div>
+<ng-map zoom="5" center="[44.409477, 18.524855]">
+      <marker ng-repeat="p in bankomati"
+        position="{{p.latitude +' '+p.longitude}}"
+        data="{{p.identifikator}}"
+        on-click="showData()";
+        title="pos: {{p.lokacija}}"
+        >    
+    </marker>
+</ng-map>

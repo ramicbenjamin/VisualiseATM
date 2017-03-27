@@ -5,6 +5,13 @@ Controllers.controller('HomeCtrl', [
     , '$cookies'
     , '$rootScope'
     , '$http'
+
+
+
+
+
+
+    
     , function ($scope, $location, $cookies, $rootScope, $http) {
         $http({
             method: 'GET'
@@ -21,6 +28,13 @@ Controllers.controller('HomeCtrl', [
 Controllers.controller("vizualizacijeCtrl", [
     '$scope'
     , '$http'
+
+
+
+
+
+
+    
     , function ($scope, $http) {
         $scope.num1 = 1;
         $scope.num2 = 3;
@@ -50,6 +64,13 @@ Controllers.controller("vizualizacijeCtrl", [
 Controllers.controller("linePlusBarChartCtrl", [
     '$scope'
     , '$http'
+
+
+
+
+
+
+
 
 
 
@@ -104,6 +125,13 @@ Controllers.controller('pregledTransakcijaCtrl', [
 
 
 
+
+
+
+
+
+
+
     
     , function ($scope, $http)
     {
@@ -126,21 +154,40 @@ Controllers.controller('pregledTransakcijaCtrl', [
 Controllers.controller('dodavanjeBankomataCtrl', [
     '$scope'
     , '$http'
+    , 'NgMap'
+
 
 
 
     
-    , function ($scope, $http)
+    , function ($scope, $http, NgMap)
     {
+        var lat = 0;
+        var lng = 0;
+        $scope.googleMapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAsoQGoDwX9elFvUw8_FkrjjnBWCE8JUjI";
+        NgMap.getMap().then(function (map) {
+            console.log(map.getCenter());
+            console.log('markers', map.markers);
+            console.log('shapes', map.shapes);
+        });
+        $scope.IspisiLokaciju = function (event) {
+            //            console.log(event.latLng.lat());
+            //            console.log(event.latLng.lng());
+            lat = event.latLng.lat();
+            lng = event.latLng.lng();
+            console.log(lat);
+            console.log(lng);
+        }
         $scope.tmpBankomat = {};
         $scope.unesiBankomat = function () {
             $http({
                 method: 'POST'
                 , data: {
-                    identifikator: $scope.tmpBankomat.identifikator
-                    , kolicinaNovca: $scope.tmpBankomat.kolicinaNovca
+                    kolicinaNovca: $scope.tmpBankomat.kolicinaNovca
                     , lokacija: $scope.tmpBankomat.lokacija
                     , lozinka: $scope.tmpBankomat.lozinka
+                    , lat: lat
+                    , lng: lng
                 }
                 , url: '/api/dodajBankomat'
             }).then(function successCallback(response) {
@@ -154,11 +201,10 @@ Controllers.controller('dodavanjeBankomataCtrl', [
 Controllers.controller('lokacijeBankomataCtrl', [
     '$scope'
     , '$http'
-
-
+    , 'NgMap'
 
     
-    , function ($scope, $http)
+    , function ($scope, $http, NgMap)
     {
         $http({
             method: 'GET'
@@ -168,11 +214,21 @@ Controllers.controller('lokacijeBankomataCtrl', [
         }, function errorCallback(response) {
             console.log(response);
         });
+        $scope.showData = function () {
+            alert(this.data);
+        }
 }]);
 //Dodavanje korisnika
 Controllers.controller('dodavanjeKorisnikaCtrl', [
     '$scope'
     , '$http'
+
+
+
+
+
+
+
 
     
     , function ($scope, $http)
@@ -196,57 +252,53 @@ Controllers.controller('dodavanjeKorisnikaCtrl', [
             });
         }
 }]);
-
 //Dodavanje računa
+Controllers.controller('kreiranjeRacunaCtrl', [
+    '$scope'
+    , '$http'
 
-Controllers.controller('kreiranjeRacunaCtrl',[
-    '$scope',
-    '$http',
-    function($scope, $http)
+
+
+
+
+    
+    , function ($scope, $http)
     {
-        
-          $http({
-                method: 'GET'
-                , url: '/api/dajSveKorisnike'
-            }).then(function successCallback(response) {
-                $scope.korisnici = response.data;
-            }, function errorCallback(response) {
-                console.log(response);
-            });
-          $http({
-                method: 'GET'
-                , url: '/api/dajSveTipoveKartica'
-            }).then(function successCallback(response) {
-                $scope.kartice = response.data;
-            }, function errorCallback(response) {
-                console.log(response);
-            });
-        
-        $scope.ispisi = function()
-        {
+        $http({
+            method: 'GET'
+            , url: '/api/dajSveKorisnike'
+        }).then(function successCallback(response) {
+            $scope.korisnici = response.data;
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+        $http({
+            method: 'GET'
+            , url: '/api/dajSveTipoveKartica'
+        }).then(function successCallback(response) {
+            $scope.kartice = response.data;
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+        $scope.ispisi = function () {
             console.log($scope.korisnik.idKorisnik);
         }
-        $scope.ispisiKarticu = function()
-        {
+        $scope.ispisiKarticu = function () {
             console.log($scope.kartica.idTipKartice);
         }
-        
-        
-        $scope.kreirajRacun = function()
-        {
+        $scope.kreirajRacun = function () {
             $http({
-                method: 'POST',
-                data : {
-                    korisnik : $scope.korisnik.idKorisnik,
-                    brojKartice : $scope.tmpKartica.brojKartice,
-                    PIN : $scope.tmpKartica.PIN,
-                    tipKartice : $scope.kartica.idTipKartice,
-                    kolicinaNovca : $scope.tmpRacun.kolicinaNovca
-                    
+                method: 'POST'
+                , data: {
+                    korisnik: $scope.korisnik.idKorisnik
+                    , brojKartice: $scope.tmpKartica.brojKartice
+                    , PIN: $scope.tmpKartica.PIN
+                    , tipKartice: $scope.kartica.idTipKartice
+                    , kolicinaNovca: $scope.tmpRacun.kolicinaNovca
                 }
                 , url: '/api/kreirajRacun'
             }).then(function successCallback(response) {
-               console.log(response)
+                console.log(response)
             }, function errorCallback(response) {
                 console.log(response);
             });

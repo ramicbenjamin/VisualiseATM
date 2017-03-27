@@ -5,6 +5,8 @@
     <script src="lib/angular.min.js"></script>
     <script src="lib/angular-cookies.js"></script>
     <script src="lib/angular-ui-router.min.js"></script>
+    <script src="https://maps.google.com/maps/api/js?libraries=placeses,visualization,drawing,geometry,places"></script>
+    <script type="text/javascript" src="https://rawgit.com/allenhwkim/angularjs-google-maps/master/build/scripts/ng-map.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <script src="lib/d3.min.js"></script>
@@ -16,11 +18,21 @@
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link type="text/css" rel="stylesheet" href="css/style.css"> </head>
+    <link type="text/css" rel="stylesheet" href="css/style.css"> 
+    </head>
 
-<body ng-app="AngularTestApp">
+<body ng-app="VisualiseATM">
+    <div class="navbar-fixed">
+        <nav class="hide-on-large-only">
+            <div class="nav-wrapper red"> <a href="#!" class="brand-logo">Visualise ATM</a>
+                <ul class="left ">
+                    <li> <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
     <ul id="slide-out" class="side-nav fixed red">
-        <h4 class="center"><span class="white-text">Visualise ATM</span></h4>
+        <h4 class="center"><span class="white-text">Visualise ATM</span></h4></div>
         <li><a ui-sref="home">Početna</a></li>
         <li><a ui-sref="dodavanjeBankomata">Dodavanje bankomata</a></li>
         <li><a ui-sref="dodavanjeKorisnika">Dodavanje korisnika</a></li>
@@ -29,7 +41,7 @@
         <li><a ui-sref="pregledTransakcija">Pregled transakcija</a></li>
         <li><a ui-sref="vizualizacije">Vizualizacije</a></li>
         <li><a ui-sref="linePlusBarChart">Line Plus Bar Chart</a></li>
-    </ul> <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+    </ul>
     <div class="container">
         <main>
             <div ui-view></div>

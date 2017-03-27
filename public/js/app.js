@@ -1,10 +1,9 @@
 //Inicijalizacija Angular aplikacije
-var app = angular.module("AngularTestApp", [
-'ui.router'
+var app = angular.module("VisualiseATM", [
+ 'ui.router'
 , 'controllers'
-, 'ngCookies',
-]);
-
+, 'ngCookies'
+, 'ngMap']);
 //Angular rutiranje
 app.config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/home');
@@ -48,6 +47,5 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         , templateUrl: 'views/drugi.html'
     })
 });
-
 //Definiranje kontrolera, ostatak kontrolera u controllers.js
 var Controllers = angular.module("controllers", []);

@@ -72,37 +72,43 @@ app.post('/api/kreirajRacun', function (req, res) {
         res.send(results);
     });
     var idZadnjeKartice;
-    connection.query('SELECT MAX(idKartica) as id FROM KARTICA', function (error, results, fields) {
+    connection.query('SELECT MAX(idKartica) AS id FROM kartica', function (error, results, fields) {
         if (error) {
             connection.end();
             throw error;
         }
         idZadnjeKartice = results[0].id;
         connection.query('INSERT INTO racun (idRacun, Kartica_idKartica, Korisnik_idKorisnik, kolicinaNovca) VALUES (NULL, "' + idZadnjeKartice + '", "' + req.body.korisnik + '", "' + req.body.kolicinaNovca + '")', function (error, results, fields) {
-        if (error) {
-            connection.end();
-            throw error;
-        }
+            if (error) {
+                connection.end();
+                throw error;
+            }
+        });
     });
-    });
-    
 })
 app.get('/api/dajDatu', function (req, res) {
         res.send('[  {    "key" : "Quantity",    "bar": true,    "values" : [ [ 112017 , 1] ,[ 2 , 2] ,[ 3 , 3] , [ 4 , 4]]  },  {    "key" : "Price",    "values" : [[ 112017 , 1] ,[ 2 , 2] ,[ 3 , 3] , [ 4 , 4]]  }]');
     })
     //DodavanjeBankomata
 app.post('/api/dodajBankomat', function (req, res) {
-        connection.query('INSERT INTO bankomat (identifikator, lozinka, kolicinaNovca, lokacija, longitude, latitude) VALUES ("' + req.body.identifikator + '", "' + req.body.lozinka + '", "' + req.body.kolicinaNovca + '", "' + req.body.lokacija + '", "22.5", "32.6")', function (error, results, fields) {
+        connection.query('SELECT MAX(idBankomat) AS lastID FROM bankomat', function (error, results, fields) {
             if (error) {
                 connection.end();
                 throw error;
             }
-            res.send(results);
+            var identifikator = req.body.lokacija + " - " + results[0].lastID;
+            connection.query('INSERT INTO bankomat (identifikator, lozinka, kolicinaNovca, lokacija, longitude, latitude) VALUES ("' + identifikator + '", "' + req.body.lozinka + '", "' + req.body.kolicinaNovca + '", "' + req.body.lokacija + '", "'+req.body.lng+'", "'+req.body.lat+'")', function (error, results, fields) {
+                if (error) {
+                    connection.end();
+                    throw error;
+                }
+                res.send(results);
+            });
         });
     })
     //DAJSVEBANKOMATE
 app.get('/api/dajSveBankomate', function (req, res) {
-        connection.query('SELECT identifikator, lokacija, kolicinaNovca FROM bankomat', function (error, results, fields) {
+        connection.query('SELECT identifikator, lokacija, kolicinaNovca, latitude, longitude FROM bankomat', function (error, results, fields) {
             if (error) {
                 connection.end();
                 throw error;
