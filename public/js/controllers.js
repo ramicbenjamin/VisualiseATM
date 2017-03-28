@@ -5,6 +5,7 @@ Controllers.controller('HomeCtrl', [
     , '$cookies'
     , '$rootScope'
     , '$http'
+    
     , function ($scope, $location, $cookies, $rootScope, $http) {
         $http({
             method: 'GET'
@@ -21,6 +22,7 @@ Controllers.controller('HomeCtrl', [
 Controllers.controller("vizualizacijeCtrl", [
     '$scope'
     , '$http'
+    
     , function ($scope, $http) {
         $scope.num1 = 1;
         $scope.num2 = 3;
@@ -50,6 +52,7 @@ Controllers.controller("vizualizacijeCtrl", [
 Controllers.controller("linePlusBarChartCtrl", [
     '$scope'
     , '$http'
+    
     , function ($scope, $http) {
         var $data = 0;
         $http({
@@ -90,6 +93,7 @@ Controllers.controller("linePlusBarChartCtrl", [
 Controllers.controller('pregledTransakcijaCtrl', [
     '$scope'
     , '$http'
+    
     , function ($scope, $http)
     {
         $scope.transakcije = [{
@@ -112,6 +116,7 @@ Controllers.controller('dodavanjeBankomataCtrl', [
     '$scope'
     , '$http'
     , 'NgMap'
+    
     , function ($scope, $http, NgMap)
     {
         var lat = 0;
@@ -154,6 +159,7 @@ Controllers.controller('lokacijeBankomataCtrl', [
     '$scope'
     , '$http'
     , 'NgMap'
+    
     , function ($scope, $http, NgMap)
     {
         $scope.ispisi = function (ajdi) {
@@ -175,6 +181,7 @@ Controllers.controller('lokacijeBankomataCtrl', [
 Controllers.controller('dodavanjeKorisnikaCtrl', [
     '$scope'
     , '$http'
+    
     , function ($scope, $http)
     {
         $scope.tmpKorisnik = {};
@@ -200,6 +207,7 @@ Controllers.controller('dodavanjeKorisnikaCtrl', [
 Controllers.controller('kreiranjeRacunaCtrl', [
     '$scope'
     , '$http'
+    
     , function ($scope, $http)
     {
         $http({
@@ -243,11 +251,11 @@ Controllers.controller('kreiranjeRacunaCtrl', [
         }
     }
 ]);
-
 Controllers.controller('izmjenaBankomataCtrl', [
     '$scope'
     , '$http'
     , '$location'
+    
     , function ($scope, $http, $location)
     {
         $http({
@@ -268,9 +276,9 @@ Controllers.controller('izmjenaBankomataDetaljCtrl', [
     '$scope'
     , '$http'
     , '$stateParams'
+    
     , function ($scope, $http, $stateParams)
     {
-       
         var urlPoziv = '/api/dajBankomat/' + $stateParams.bankomatID;
         $http({
             method: 'GET'
@@ -280,31 +288,31 @@ Controllers.controller('izmjenaBankomataDetaljCtrl', [
         }, function errorCallback(response) {
             console.log(response);
         });
-        
         $scope.promijeniStanje = function () {
             $http({
-                method: 'POST',
-                data : {
-                    idBankomataZaPunjenje : $stateParams.bankomatID,
-                    novaKolicinaNovca : $scope.novaVrijednost
+                method: 'POST'
+                , data: {
+                    idBankomataZaPunjenje: $stateParams.bankomatID
+                    , novaKolicinaNovca: $scope.novaVrijednost
                 }
                 , url: 'api/napuniBankomat'
             }).then(function successCallback(response) {
                 console.log(response);
+                $scope.bankomat.kolicinaNovca = $scope.novaVrijednost;
             }, function errorCallback(response) {
                 console.log(response);
             });
         }
     }
 ]);
-
-
 Controllers.controller('izmjenaKorisnikaCtrl', [
     '$scope'
     , '$http'
     , '$location'
+    
     , function ($scope, $http, $location)
     {
+        $scope.jeLiSkriven = true;
         $http({
             method: 'GET'
             , url: '/api/dajSveKorisnike'
@@ -313,40 +321,48 @@ Controllers.controller('izmjenaKorisnikaCtrl', [
         }, function errorCallback(response) {
             console.log(response);
         });
-        $scope.ispisiKorisnika = function () {
-            var editLink = '/izmjenaKorisnika/' + $scope.korisnik.idKorisnik;
+        $scope.ispisiRacune = function () {
+            
+            var urlRacuna = '/api/dajSveRacune/' + $scope.korisnik.idKorisnik;
+            $http({
+                method: 'GET'
+                , url: urlRacuna
+            }).then(function successCallback(response) {
+                $scope.racuni = response.data;
+                $scope.jeLiSkriven = false;
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+
+        }
+        
+        $scope.ispisiDetaljeRacuna = function()
+        {
+                        
+            var editLink = '/izmjenaKorisnika/' + $scope.korisnik.idKorisnik + "/" + $scope.racun.idRacun;
             $location.path(editLink);
         }
     }
-]); 
+]);
 Controllers.controller('izmjenaKorisnikaDetaljCtrl', [
     '$scope'
     , '$http'
     , '$stateParams'
+    
     , function ($scope, $http, $stateParams)
     {
-       
-        var urlPoziv = '/api/dajKorisnika/' + $stateParams.korisnikID;
-        
-        $http({
-            method: 'GET'
-            , url: urlPoziv
-        }).then(function successCallback(response) {
-            $scope.korisnici = response.data;
-        }, function errorCallback(response) {
-            console.log(response);
-        });
-        
         $scope.promijeniStanje = function () {
             $http({
-                method: 'POST',
-                data : {
-                    idKorisnika : $stateParams.korisnikID,
-                    novaKolicinaNovca : $scope.novaVrijednost
+                method: 'POST'
+                , data: {
+                    idKorisnika: $stateParams.korisnikID,
+                    idRacuna: $stateParams.racunID
+                    , novaKolicinaNovca: $scope.novaVrijednost
                 }
                 , url: 'api/promijeniStanjeRacuna'
             }).then(function successCallback(response) {
                 console.log(response);
+                $scope.racun.kolicinaNovca = $scope.novaVrijednost;
             }, function errorCallback(response) {
                 console.log(response);
             });

@@ -136,9 +136,19 @@ app.post('/api/napuniBankomat', function (req, res) {
             res.send(results);
         });
     })
-//ZA SAD OVAKO, TREBA IZMJENITI
+
 app.post('/api/promijeniStanjeRacuna', function (req, res) {
-        connection.query('UPDATE racun SET kolicinaNovca = '+req.body.novaKolicinaNovca+' WHERE Korisnik_idKorisnik = +'+req.body.idKorisnika, function (error, results, fields) {
+        connection.query('UPDATE racun SET kolicinaNovca = '+req.body.novaKolicinaNovca+' WHERE idRacun = +'+req.body.idRacuna, function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+
+app.get('/api/dajSveRacune/:id', function (req, res) {
+        connection.query('SELECT * FROM racun WHERE Korisnik_idKorisnik = ' + req.params.id, function (error, results, fields) {
             if (error) {
                 connection.end();
                 throw error;

@@ -32,7 +32,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         , templateUrl: 'views/izmjenaKorisnika.html'
         , controller: 'izmjenaKorisnikaCtrl'
     }).state('izmjenaKorisnika.detalji', {
-        url: "/:korisnikID",
+        url: "/:korisnikID/:racunID",
         templateUrl: 'views/detaljKorisnika.html',
         controller: 'izmjenaKorisnikaDetaljCtrl'
     }).state('kreiranjeRacuna', {

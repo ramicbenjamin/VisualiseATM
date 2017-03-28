@@ -1,4 +1,7 @@
-<select class="browser-default" ng-options="korisnik as korisnik.ime for korisnik in korisnici" ng-model="korisnik" ng-change="ispisiKorisnika()">
+<select class="browser-default" ng-options="korisnik as korisnik.ime for korisnik in korisnici" ng-model="korisnik" ng-change="ispisiRacune()">
     <option value="" disabled selected>Odaberi korisnika</option>
+</select>
+<select class = "browser-default" ng-model="racun" ng-options="racun as racun.idRacun for racun in racuni" ng-hide = "jeLiSkriven" ng-change="ispisiDetaljeRacuna()">
+    <option value="" disabled selected>Odaberi račun</option>>
 </select>
 <div ui-view></div>
