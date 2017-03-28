@@ -19,6 +19,22 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: '/dodavanjeBankomata'
         , templateUrl: 'views/dodavanjeBankomata.html'
         , controller: 'dodavanjeBankomataCtrl'
+    }).state('izmjenaBankomata', {
+        url: '/izmjenaBankomata'
+        , templateUrl: 'views/izmjenaBankomata.html'
+        , controller: 'izmjenaBankomataCtrl'
+    }).state('izmjenaBankomata.detalj', {
+        url: "/:bankomatID",
+        templateUrl: 'views/detaljBankomata.html',
+        controller: 'izmjenaBankomataDetaljCtrl'
+    }).state('izmjenaKorisnika', {
+        url: '/izmjenaKorisnika'
+        , templateUrl: 'views/izmjenaKorisnika.html'
+        , controller: 'izmjenaKorisnikaCtrl'
+    }).state('izmjenaKorisnika.detalji', {
+        url: "/:korisnikID",
+        templateUrl: 'views/detaljKorisnika.html',
+        controller: 'izmjenaKorisnikaDetaljCtrl'
     }).state('kreiranjeRacuna', {
         url: '/kreiranjeRacuna'
         , templateUrl: 'views/kreiranjeRacuna.html'

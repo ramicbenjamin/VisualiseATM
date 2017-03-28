@@ -97,7 +97,7 @@ app.post('/api/dodajBankomat', function (req, res) {
                 throw error;
             }
             var identifikator = req.body.lokacija + " - " + results[0].lastID;
-            connection.query('INSERT INTO bankomat (identifikator, lozinka, kolicinaNovca, lokacija, longitude, latitude) VALUES ("' + identifikator + '", "' + req.body.lozinka + '", "' + req.body.kolicinaNovca + '", "' + req.body.lokacija + '", "'+req.body.lng+'", "'+req.body.lat+'")', function (error, results, fields) {
+            connection.query('INSERT INTO bankomat (identifikator, lozinka, kolicinaNovca, lokacija, longitude, latitude) VALUES ("' + identifikator + '", "' + req.body.lozinka + '", "' + req.body.kolicinaNovca + '", "' + req.body.lokacija + '", "' + req.body.lng + '", "' + req.body.lat + '")', function (error, results, fields) {
                 if (error) {
                     connection.end();
                     throw error;
@@ -108,7 +108,37 @@ app.post('/api/dodajBankomat', function (req, res) {
     })
     //DAJSVEBANKOMATE
 app.get('/api/dajSveBankomate', function (req, res) {
-        connection.query('SELECT identifikator, lokacija, kolicinaNovca, latitude, longitude FROM bankomat', function (error, results, fields) {
+        connection.query('SELECT * FROM bankomat', function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+    //DAJBANKOMAT SA SPECIF ID
+app.get('/api/dajBankomat/:id', function (req, res) {
+        connection.query('SELECT * FROM bankomat WHERE idBankomat = ' + req.params.id, function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+    //PUNJENJE BANKOMATA
+app.post('/api/napuniBankomat', function (req, res) {
+        connection.query('UPDATE bankomat SET kolicinaNovca = '+req.body.novaKolicinaNovca+' WHERE idBankomat = +'+req.body.idBankomataZaPunjenje, function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+//ZA SAD OVAKO, TREBA IZMJENITI
+app.post('/api/promijeniStanjeRacuna', function (req, res) {
+        connection.query('UPDATE racun SET kolicinaNovca = '+req.body.novaKolicinaNovca+' WHERE Korisnik_idKorisnik = +'+req.body.idKorisnika, function (error, results, fields) {
             if (error) {
                 connection.end();
                 throw error;

@@ -1,0 +1,11 @@
+<h4 class="center" ng-model="bankomat">Bankomat : {{bankomat.identifikator}}</h4>
+<h5 ng-model="bankomat">Trenutno stanje: {{bankomat.kolicinaNovca}} n.j.</h5>
+<div class="row">
+    <div class="input-field col s12">
+        <input id="novaKolicinaNovcaUBankomatu" type="text" class="validate" ng-model="novaVrijednost">
+        <label for="novaKolicinaNovcaUBankomatu">Novo stanje</label>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12"><a class="waves-effect btn-large right velikoDugme" ng-click="promijeniStanje()">Izmjeni stanje</a></div>
+</div>

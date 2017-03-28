@@ -12,10 +12,10 @@
     </thead>
     <tbody>
         <tr ng-repeat="bankomat in bankomati">
-            <td>{{bankomat.identifikator}}</td>
+            <td >{{bankomat.identifikator}}</td>
             <td>{{bankomat.lokacija}}</td>
             <td>{{bankomat.kolicinaNovca}}</td>
-            <td><a>UREDI</a></td>
+            <td><a ng-click = "ispisi(bankomat)">UREDI</a></td>
         </tr>
     </tbody>
 </table>
@@ -29,4 +29,16 @@
         title="pos: {{p.lokacija}}"
         >    
     </marker>
+    
 </ng-map>
+<!--
+<ng-map center="[44.409477, 18.524855]" zoom="4" tilt="45"
+    map-type-id="SATELLITE">
+    <marker ng-repeat="p in bankomati"
+        position="{{p.latitude +' ,'+p.longitude}}"
+        data="{{p.identifikator}}"
+        on-click="showData()";
+        title="pos: {{p.lokacija}}"
+        >    
+    </marker>
+  </ng-map>-->
