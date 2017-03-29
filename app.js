@@ -29,7 +29,7 @@ app.get('/api/TEST', function (req, res) {
             res.send(results);
         });
     })
-    //DAJ SVE KORISNIKE
+//DAJ SVE KORISNIKE
 app.get('/api/dajSveKorisnike', function (req, res) {
         var rezultati = 0;
         connection.query('SELECT * FROM korisnik', function (error, results, fields) {
@@ -40,7 +40,7 @@ app.get('/api/dajSveKorisnike', function (req, res) {
             res.send(results);
         });
     })
-    //DAJ SVE TIPOVE KARTICA
+//DAJ SVE TIPOVE KARTICA
 app.get('/api/dajSveTipoveKartica', function (req, res) {
         var rezultati = 0;
         connection.query('SELECT * FROM tipkartice', function (error, results, fields) {
@@ -86,6 +86,15 @@ app.post('/api/kreirajRacun', function (req, res) {
         });
     });
 })
+app.get('/api/dajTopTransakcije', function (req, res) {
+        connection.query('SELECT b.identifikator AS label, t.kolicinaNovca AS value FROM bankomat AS b, transakcija AS t WHERE b.idBankomat = t.Bankomat_idBankomat ORDER BY value DESC LIMIT 5', function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
 app.get('/api/dajDatu', function (req, res) {
         res.send('[  {    "key" : "Quantity",    "bar": true,    "values" : [ [ 112017 , 1] ,[ 2 , 2] ,[ 3 , 3] , [ 4 , 4]]  },  {    "key" : "Price",    "values" : [[ 112017 , 1] ,[ 2 , 2] ,[ 3 , 3] , [ 4 , 4]]  }]');
     })
@@ -136,7 +145,7 @@ app.post('/api/napuniBankomat', function (req, res) {
             res.send(results);
         });
     })
-
+//PROMJENA STANJA RAČUNA
 app.post('/api/promijeniStanjeRacuna', function (req, res) {
         connection.query('UPDATE racun SET kolicinaNovca = '+req.body.novaKolicinaNovca+' WHERE idRacun = +'+req.body.idRacuna, function (error, results, fields) {
             if (error) {

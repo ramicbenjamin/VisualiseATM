@@ -5,8 +5,10 @@ Controllers.controller('HomeCtrl', [
     , '$cookies'
     , '$rootScope'
     , '$http'
+    , 'NgMap'
+
     
-    , function ($scope, $location, $cookies, $rootScope, $http) {
+    , function ($scope, $location, $cookies, $rootScope, $http, NgMap) {
         $http({
             method: 'GET'
             , url: '/api/dajSveKorisnike'
@@ -22,6 +24,8 @@ Controllers.controller('HomeCtrl', [
 Controllers.controller("vizualizacijeCtrl", [
     '$scope'
     , '$http'
+
+
     
     , function ($scope, $http) {
         $scope.num1 = 1;
@@ -52,6 +56,8 @@ Controllers.controller("vizualizacijeCtrl", [
 Controllers.controller("linePlusBarChartCtrl", [
     '$scope'
     , '$http'
+
+
     
     , function ($scope, $http) {
         var $data = 0;
@@ -93,6 +99,8 @@ Controllers.controller("linePlusBarChartCtrl", [
 Controllers.controller('pregledTransakcijaCtrl', [
     '$scope'
     , '$http'
+
+
     
     , function ($scope, $http)
     {
@@ -116,6 +124,8 @@ Controllers.controller('dodavanjeBankomataCtrl', [
     '$scope'
     , '$http'
     , 'NgMap'
+
+
     
     , function ($scope, $http, NgMap)
     {
@@ -159,6 +169,8 @@ Controllers.controller('lokacijeBankomataCtrl', [
     '$scope'
     , '$http'
     , 'NgMap'
+
+
     
     , function ($scope, $http, NgMap)
     {
@@ -181,6 +193,8 @@ Controllers.controller('lokacijeBankomataCtrl', [
 Controllers.controller('dodavanjeKorisnikaCtrl', [
     '$scope'
     , '$http'
+
+
     
     , function ($scope, $http)
     {
@@ -207,6 +221,8 @@ Controllers.controller('dodavanjeKorisnikaCtrl', [
 Controllers.controller('kreiranjeRacunaCtrl', [
     '$scope'
     , '$http'
+
+
     
     , function ($scope, $http)
     {
@@ -255,6 +271,8 @@ Controllers.controller('izmjenaBankomataCtrl', [
     '$scope'
     , '$http'
     , '$location'
+
+
     
     , function ($scope, $http, $location)
     {
@@ -276,6 +294,8 @@ Controllers.controller('izmjenaBankomataDetaljCtrl', [
     '$scope'
     , '$http'
     , '$stateParams'
+
+
     
     , function ($scope, $http, $stateParams)
     {
@@ -309,6 +329,8 @@ Controllers.controller('izmjenaKorisnikaCtrl', [
     '$scope'
     , '$http'
     , '$location'
+
+
     
     , function ($scope, $http, $location)
     {
@@ -322,7 +344,6 @@ Controllers.controller('izmjenaKorisnikaCtrl', [
             console.log(response);
         });
         $scope.ispisiRacune = function () {
-            
             var urlRacuna = '/api/dajSveRacune/' + $scope.korisnik.idKorisnik;
             $http({
                 method: 'GET'
@@ -333,12 +354,8 @@ Controllers.controller('izmjenaKorisnikaCtrl', [
             }, function errorCallback(response) {
                 console.log(response);
             });
-
         }
-        
-        $scope.ispisiDetaljeRacuna = function()
-        {
-                        
+        $scope.ispisiDetaljeRacuna = function () {
             var editLink = '/izmjenaKorisnika/' + $scope.korisnik.idKorisnik + "/" + $scope.racun.idRacun;
             $location.path(editLink);
         }
@@ -348,6 +365,8 @@ Controllers.controller('izmjenaKorisnikaDetaljCtrl', [
     '$scope'
     , '$http'
     , '$stateParams'
+
+
     
     , function ($scope, $http, $stateParams)
     {
@@ -355,8 +374,8 @@ Controllers.controller('izmjenaKorisnikaDetaljCtrl', [
             $http({
                 method: 'POST'
                 , data: {
-                    idKorisnika: $stateParams.korisnikID,
-                    idRacuna: $stateParams.racunID
+                    idKorisnika: $stateParams.korisnikID
+                    , idRacuna: $stateParams.racunID
                     , novaKolicinaNovca: $scope.novaVrijednost
                 }
                 , url: 'api/promijeniStanjeRacuna'
@@ -367,5 +386,48 @@ Controllers.controller('izmjenaKorisnikaDetaljCtrl', [
                 console.log(response);
             });
         }
+    }
+]);
+Controllers.controller('topPetBankomataCtrl', [
+    '$scope'
+    , '$http'
+    , '$stateParams'
+
+
+    
+    , function ($scope, $http, $stateParams)
+    {
+        $http({
+            method: 'GET'
+            , url: 'api/dajTopTransakcije'
+        }).then(function successCallback(response) {
+            $scope.transakcije = response.data;
+            nv.addGraph(function () {
+                var chart = nv.models.pieChart().x(function (d) {
+                    return d.label
+                }).y(function (d) {
+                    return d.value
+                }).showLabels(true);
+                d3.select("#pieChart svg").datum($scope.transakcije).transition().duration(1200).call(chart);
+                return chart;
+            });
+            
+            nv.addGraph(function () {
+                var podaciZaBarChart = [];
+                podaciZaBarChart.key = "Nest";
+                podaciZaBarChart.valus = $scope.transakcije;
+                console.log(podaciZaBarChart);
+                var chart = nv.models.discreteBarChart().x(function (d) {
+                    return d.label
+                }).y(function (d) {
+                    return d.value
+                }).staggerLabels(true).tooltips(false).showValues(true)
+                d3.select('#barChart svg').datum(podaciZaBarChart).transition().duration(500).call(chart);
+                nv.utils.windowResize(chart.update);
+                return chart;
+            });
+        }, function errorCallback(response) {
+            console.log(response);
+        });
     }
 ]);
