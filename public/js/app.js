@@ -47,10 +47,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: '/lokacijeBankomata'
         , templateUrl: 'views/lokacijeBankomata.html'
         , controller: 'lokacijeBankomataCtrl'
-    }).state('topPetBankomata', {
-        url: '/topPetBankomata'
-        , templateUrl: 'views/topPetBankomata.html'
-        , controller: 'topPetBankomataCtrl'
+    }).state('topPetTransakcija', {
+        url: '/topPetTransakcija'
+        , templateUrl: 'views/topPetTransakcija.html'
+        , controller: 'topPetTransakcijaCtrl'
+    }).state('poredjenjeDvaBankomata', {
+        url: '/poredjenjeDvaBankomata'
+        , templateUrl: 'views/poredjenjeDvaBankomata.html'
+        , controller: 'poredjenjeDvaBankomataCtrl'
     }).state('pregledTransakcija', {
         url: '/pregledTransakcija'
         , templateUrl: 'views/pregledTransakcija.html'

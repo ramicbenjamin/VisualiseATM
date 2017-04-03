@@ -95,6 +95,15 @@ app.get('/api/dajTopTransakcije', function (req, res) {
             res.send(results);
         });
     })
+app.get('/api/dajTransakcijuBankomata/:id', function (req, res) {
+        connection.query('SELECT b.identifikator AS label, sum(t.kolicinaNovca) AS value FROM bankomat AS b, transakcija AS t WHERE b.idBankomat = t.Bankomat_idBankomat and b.idBankomat = '+req.params.id, function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
 app.get('/api/dajDatu', function (req, res) {
         res.send('[  {    "key" : "Quantity",    "bar": true,    "values" : [ [ 112017 , 1] ,[ 2 , 2] ,[ 3 , 3] , [ 4 , 4]]  },  {    "key" : "Price",    "values" : [[ 112017 , 1] ,[ 2 , 2] ,[ 3 , 3] , [ 4 , 4]]  }]');
     })

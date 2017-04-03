@@ -1,0 +1,28 @@
+<h3 class = "center"> Uporedi dva bankomata </h3>
+<h5> Odaberi bankomate za poređenje</h5>
+<select class="browser-default" ng-options="bankomat as bankomat.identifikator for bankomat in bankomati" ng-model="bankomat1" ng-change="selektujBankomat1()">
+    <option value="" disabled selected>Odaberi bankomat 1</option>
+</select>
+<select class="browser-default" ng-options="bankomat as bankomat.identifikator for bankomat in bankomati" ng-model="bankomat2" ng-change="selektujBankomat2()">
+    <option value="" disabled selected>Odaberi bankomat 2</option>
+</select>
+<div class="row">
+    <div class="col s12"><a class="waves-effect btn-large right" ng-click="uporedi()">Uporedi</a></div>
+</div>
+
+
+<style>
+
+#chart svg {
+  height: 400px;
+}
+
+</style>
+
+
+<div id="uporedbaDvaBankomata">
+  <svg></svg>
+</div>
+
+
+{{formirani}}
