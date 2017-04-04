@@ -11,10 +11,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: '/home'
         , templateUrl: 'views/home.html'
         , controller: 'HomeCtrl'
-    }).state('vizualizacije', {
-        url: '/vizualizacije'
-        , templateUrl: 'views/vizualizacije.html'
-        , controller: 'vizualizacijeCtrl'
     }).state('dodavanjeBankomata', {
         url: '/dodavanjeBankomata'
         , templateUrl: 'views/dodavanjeBankomata.html'
@@ -51,18 +47,22 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: '/topPetTransakcija'
         , templateUrl: 'views/topPetTransakcija.html'
         , controller: 'topPetTransakcijaCtrl'
+    }).state('topBankomatiPoBrojuTransakcija', {
+        url: '/topBankomatiPoBrojuTransakcija'
+        , templateUrl: 'views/topBankomatiPoBrojuTransakcija.html'
+        , controller: 'topBankomatiPoBrojuTransakcijaCtrl'
     }).state('poredjenjeDvaBankomata', {
         url: '/poredjenjeDvaBankomata'
         , templateUrl: 'views/poredjenjeDvaBankomata.html'
         , controller: 'poredjenjeDvaBankomataCtrl'
+    }).state('sveTransakcijeZaBankomat', {
+        url: '/sveTransakcijeZaBankomat'
+        , templateUrl: 'views/sveTransakcijeZaBankomat.html'
+        , controller: 'sveTransakcijeZaBankomatCtrl'
     }).state('pregledTransakcija', {
         url: '/pregledTransakcija'
         , templateUrl: 'views/pregledTransakcija.html'
         , controller: 'pregledTransakcijaCtrl'
-    }).state('linePlusBarChart', {
-        url: '/linePlusBarChart'
-        , templateUrl: 'views/linePlusBarChart.html'
-        , controller: 'linePlusBarChartCtrl'
     }).state('about.prvi', {
         url: '/prvi'
         , templateUrl: 'views/prvi.html'

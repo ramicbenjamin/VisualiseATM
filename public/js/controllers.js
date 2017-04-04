@@ -22,93 +22,12 @@ Controllers.controller('HomeCtrl', [
         });
     }
 ]);
+
+
 //VIZUALIZACIJE CTRL
-Controllers.controller("vizualizacijeCtrl", [
-    '$scope'
-    , '$http'
-
-
-
-
-    
-    , function ($scope, $http) {
-        $scope.num1 = 1;
-        $scope.num2 = 3;
-        $scope.update = function () {
-            nv.addGraph(function () {
-                var chart = nv.models.pieChart().x(function (d) {
-                    return d.label
-                }).y(function (d) {
-                    return d.value
-                }).showLabels(true);
-                d3.select("#chart svg").datum([
-                    {
-                        "label": $scope.num1
-                        , "value": $scope.num1
-                        }
-                    , {
-                        "label": $scope.num2
-                        , "value": $scope.num2
-                        }
-                    ]).transition().duration(1200).call(chart);
-                return chart;
-            });
-        }
-    }
-]);
-//LINE PLUS BAR CHART CTRL
-Controllers.controller("linePlusBarChartCtrl", [
-    '$scope'
-    , '$http'
-
-
-
-
-    
-    , function ($scope, $http) {
-        var $data = 0;
-        $http({
-            method: 'GET'
-            , url: '/api/dajDatu'
-        }).then(function successCallback(response) {
-            console.log(response.data);
-            $data = response.data;
-            nv.addGraph(function () {
-                var chart = nv.models.linePlusBarChart().margin({
-                    top: 30
-                    , right: 60
-                    , bottom: 50
-                    , left: 70
-                }).x(function (d, i) {
-                    return i
-                }).y(function (d) {
-                    return d[1]
-                }).color(d3.scale.category10().range());
-                chart.xAxis.showMaxMin(false).tickFormat(function (d) {
-                    var dx = $data[0].values[d] && $data[0].values[d][0] || 0;
-                    return d3.time.format('%x')(new Date())
-                });
-                chart.y1Axis.tickFormat(d3.format(',f'));
-                chart.y2Axis.tickFormat(function (d) {
-                    return '$' + d3.format(',f')(d)
-                });
-                chart.bars.forceY([0]);
-                d3.select('#chart svg').datum($data).transition().duration(500).call(chart);
-                nv.utils.windowResize(chart.update);
-                return chart;
-            });
-        }, function errorCallback(response) {
-            $scope.data = response;
-        });
-    }
-]);
 Controllers.controller('pregledTransakcijaCtrl', [
     '$scope'
     , '$http'
-
-
-
-
     
     , function ($scope, $http)
     {
@@ -178,18 +97,10 @@ Controllers.controller('dodavanjeBankomataCtrl', [
 Controllers.controller('lokacijeBankomataCtrl', [
     '$scope'
     , '$http'
-    , 'NgMap'
-
-
-
-
-    
+    , 'NgMap'    
     , function ($scope, $http, NgMap)
     {
-        $scope.ispisi = function (ajdi) {
-            console.log(ajdi);
-        }
-        $http({
+            $http({
             method: 'GET'
             , url: '/api/dajSveBankomate'
         }).then(function successCallback(response) {
@@ -197,9 +108,6 @@ Controllers.controller('lokacijeBankomataCtrl', [
         }, function errorCallback(response) {
             console.log(response);
         });
-        $scope.showData = function () {
-            alert(this.data);
-        }
 }]);
 //Dodavanje korisnika
 Controllers.controller('dodavanjeKorisnikaCtrl', [
@@ -516,4 +424,78 @@ Controllers.controller('poredjenjeDvaBankomataCtrl', [
             });
         }
     }
-])
+]);
+
+Controllers.controller('topBankomatiPoBrojuTransakcijaCtrl', [
+   '$scope'
+    ,'$http'
+    ,function($scope, $http)
+    {
+             $http({
+            method: 'GET'
+            , url: 'api/dajTopBankomatePoBrojuTransakcija'
+        }).then(function successCallback(response) {
+            $scope.topBankomati = response.data;
+            var podaciZaBarChart = [];
+            podaciZaBarChart.key = "Nesto";
+            podaciZaBarChart.values = $scope.topBankomati;
+            console.log(podaciZaBarChart);
+            var podaciNovi = [];
+            podaciNovi.push(podaciZaBarChart);
+            nv.addGraph(function () {
+                var chart = nv.models.discreteBarChart().x(function (d) {
+                    return d.label
+                }).y(function (d) {
+                    return d.value
+                }).staggerLabels(true).tooltips(false).showValues(true)
+                d3.select('#barChartTopBankomataPoTrasnakcijama svg').datum(podaciNovi).transition().duration(500).call(chart);
+                nv.utils.windowResize(chart.update);
+                return chart;
+            });
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    }
+]);
+
+Controllers.controller('sveTransakcijeZaBankomatCtrl', [
+    '$scope'
+    ,'$http'
+    ,function($scope, $http)
+    {
+        $http({
+            method: 'GET'
+            , url: '/api/dajSveBankomate'
+        }).then(function successCallback(response) {
+            $scope.bankomati = response.data;
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+        $scope.selektujBankomat = function () {
+                $http({
+                method: 'GET'
+                , url: '/api/dajSveTransakcijeSaBankomata/' + $scope.bankomat.idBankomat
+            }).then(function successCallback(response) {
+                $scope.sveTransakcije = response.data;
+                  var podaciZaBarChart = [];
+                podaciZaBarChart.key = "Nesto";
+                podaciZaBarChart.values = $scope.sveTransakcije;
+                var podaciNovi = [];
+                podaciNovi.push(podaciZaBarChart);
+                nv.addGraph(function () {
+                    var chart = nv.models.discreteBarChart().x(function (d) {
+                        return d.label
+                    }).y(function (d) {
+                        return d.value
+                    }).staggerLabels(true).tooltips(false).showValues(true)
+                    d3.select('#barChartSvihTransakcijaZaBankomat svg').datum(podaciNovi).transition().duration(500).call(chart);
+                    nv.utils.windowResize(chart.update);
+                    return chart;
+                });
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+        }
+    }
+]);
+

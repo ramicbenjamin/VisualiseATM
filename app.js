@@ -104,8 +104,24 @@ app.get('/api/dajTransakcijuBankomata/:id', function (req, res) {
             res.send(results);
         });
     })
-app.get('/api/dajDatu', function (req, res) {
-        res.send('[  {    "key" : "Quantity",    "bar": true,    "values" : [ [ 112017 , 1] ,[ 2 , 2] ,[ 3 , 3] , [ 4 , 4]]  },  {    "key" : "Price",    "values" : [[ 112017 , 1] ,[ 2 , 2] ,[ 3 , 3] , [ 4 , 4]]  }]');
+app.get('/api/dajTopBankomatePoBrojuTransakcija', function (req, res) {
+        connection.query('SELECT b.identifikator as label, COUNT(t.Bankomat_idBankomat) as value FROM transakcija t LEFT JOIN bankomat b ON b.idBankomat = t.Bankomat_idBankomat GROUP BY t.Bankomat_idBankomat ORDER BY COUNT(t.Bankomat_idBankomat) DESC LIMIT 10', function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+
+app.get('/api/dajSveTransakcijeSaBankomata/:id', function (req, res) {
+        connection.query('SELECT DATE_FORMAT(transakcija.datumTransakcije,"%b %d %Y %h:%i %p") as label, transakcija.kolicinaNovca as value FROM transakcija WHERE transakcija.Bankomat_idBankomat =' + req.params.id, function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
     })
     //DodavanjeBankomata
 app.post('/api/dodajBankomat', function (req, res) {
@@ -134,9 +150,10 @@ app.get('/api/dajSveBankomate', function (req, res) {
             res.send(results);
         });
     })
+
     //DAJBANKOMAT SA SPECIF ID
 app.get('/api/dajBankomat/:id', function (req, res) {
-        connection.query('SELECT * FROM bankomat WHERE idBankomat = ' + req.params.id, function (error, results, fields) {
+        connection.query('SELECT * FROM bankomat WHERE idBankomat = '  + req.params.id, function (error, results, fields) {
             if (error) {
                 connection.end();
                 throw error;

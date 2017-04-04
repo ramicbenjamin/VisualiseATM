@@ -1,0 +1,12 @@
+<h3 class="center">Transakcije po bankomatu:</h3>
+<select class="browser-default" ng-options="bankomat as bankomat.identifikator for bankomat in bankomati" ng-model="bankomat" ng-change="selektujBankomat()">
+    <option value="" disabled selected>Odaberi bankomat</option>
+</select>
+<style>
+    #barChartSvihTransakcijaZaBankomat svg {
+        height: 400px;
+    }
+</style>
+<div id="barChartSvihTransakcijaZaBankomat">
+    <svg></svg>
+</div>
