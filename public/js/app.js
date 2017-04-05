@@ -51,6 +51,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: '/topBankomatiPoBrojuTransakcija'
         , templateUrl: 'views/topBankomatiPoBrojuTransakcija.html'
         , controller: 'topBankomatiPoBrojuTransakcijaCtrl'
+    }).state('udjeliKoristenihKartica', {
+        url: '/udjeliKoristenihKartica'
+        , templateUrl: 'views/udjeliKoristenihKartica.html'
+        , controller: 'udjeliKoristenihKarticaCtrl'
+    }).state('najkoristenijeKarticeKorisnici', {
+        url: '/najkoristenijeKarticeKorisnici'
+        , templateUrl: 'views/najkoristenijeKarticeKorisnici.html'
+        , controller: 'najkoristenijeKarticeKorisniciCtrl'
     }).state('poredjenjeDvaBankomata', {
         url: '/poredjenjeDvaBankomata'
         , templateUrl: 'views/poredjenjeDvaBankomata.html'

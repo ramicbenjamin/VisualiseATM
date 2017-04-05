@@ -6,20 +6,8 @@ Controllers.controller('HomeCtrl', [
     , '$rootScope'
     , '$http'
     , 'NgMap'
-
-
-
-    
     , function ($scope, $location, $cookies, $rootScope, $http, NgMap) {
-        $http({
-            method: 'GET'
-            , url: '/api/dajSveKorisnike'
-        }).then(function successCallback(response) {
-            $scope.response = response.data;
-            $scope.imenaIzBaze = response.data;
-        }, function errorCallback(response) {
-            $scope.naziv = response;
-        });
+
     }
 ]);
 
@@ -31,19 +19,14 @@ Controllers.controller('pregledTransakcijaCtrl', [
     
     , function ($scope, $http)
     {
-        $scope.transakcije = [{
-            "brTrans": 5
-            , "kolicinaNov": 10
-            , "datum": '1/1/2017'
-        }, {
-            "brTrans": 5
-            , "kolicinaNov": 10
-            , "datum": '1/5/2017'
-        }, {
-            "brTrans": 5
-            , "kolicinaNov": 10
-            , "datum": '1/3/2017'
-        }];
+        $http({
+            method: 'GET'
+            , url: '/api/dajSveTransakcijeSaImenima'
+        }).then(function successCallback(response) {
+            $scope.sveTransakcije = response.data;
+        }, function errorCallback(response) {
+            $scope.naziv = response;
+        });
     }
 
 ]);
@@ -51,12 +34,8 @@ Controllers.controller('dodavanjeBankomataCtrl', [
     '$scope'
     , '$http'
     , 'NgMap'
-
-
-
-
-    
-    , function ($scope, $http, NgMap)
+    , '$location'
+    , function ($scope, $http, NgMap, $location)
     {
         var lat = 0;
         var lng = 0;
@@ -76,6 +55,9 @@ Controllers.controller('dodavanjeBankomataCtrl', [
         }
         $scope.tmpBankomat = {};
         $scope.unesiBankomat = function () {
+            var MasterCard = document.getElementById("MasterCard").checked;
+            var Visa = document.getElementById("Visa").checked;
+            var Maestro = document.getElementById("Maestro").checked;
             $http({
                 method: 'POST'
                 , data: {
@@ -84,10 +66,14 @@ Controllers.controller('dodavanjeBankomataCtrl', [
                     , lozinka: $scope.tmpBankomat.lozinka
                     , lat: lat
                     , lng: lng
+                    , MasterCard : MasterCard
+                    , Visa : Visa
+                    , Maestro : Maestro
                 }
                 , url: '/api/dodajBankomat'
             }).then(function successCallback(response) {
                 console.log(response);
+                $location.url('/lokacijeBankomata');
             }, function errorCallback(response) {
                 console.log(response);
             });
@@ -113,16 +99,11 @@ Controllers.controller('lokacijeBankomataCtrl', [
 Controllers.controller('dodavanjeKorisnikaCtrl', [
     '$scope'
     , '$http'
-
-
-
-
-    
     , function ($scope, $http)
     {
         $scope.tmpKorisnik = {};
         $scope.dodajKorisnika = function () {
-            console.log('prošo');
+            var admin = document.getElementById("jelAdministrator").checked;
             $http({
                 method: 'POST'
                 , data: {
@@ -130,6 +111,7 @@ Controllers.controller('dodavanjeKorisnikaCtrl', [
                     , prezime: $scope.tmpKorisnik.prezime
                     , korisnickoIme: $scope.tmpKorisnik.korisnickoIme
                     , lozinka: $scope.tmpKorisnik.lozinka
+                    , admin : admin
                 }
                 , url: '/api/dodajKorisnika'
             }).then(function successCallback(response) {
@@ -499,3 +481,84 @@ Controllers.controller('sveTransakcijeZaBankomatCtrl', [
     }
 ]);
 
+Controllers.controller('udjeliKoristenihKarticaCtrl', [
+   '$scope'
+    ,'$http'
+    ,function ($scope, $http)
+    {
+        $http({
+            method: 'GET'
+            , url: 'api/dajUdjeleKoristenihKartica'
+        }).then(function successCallback(response) {
+            $scope.kartice = response.data;
+            nv.addGraph(function () {
+                var chart = nv.models.pieChart().x(function (d) {
+                    return d.label
+                }).y(function (d) {
+                    return d.value
+                }).showLabels(true);
+                d3.select("#pieChartKartice svg").datum($scope.kartice).transition().duration(1200).call(chart);
+                return chart;
+            });
+            var podaciZaBarChart = [];
+            podaciZaBarChart.key = "Cumulative Return";
+            podaciZaBarChart.values = $scope.kartice;
+            console.log(podaciZaBarChart);
+            var podaciNovi = [];
+            podaciNovi.push(podaciZaBarChart);
+            nv.addGraph(function () {
+                var chart = nv.models.discreteBarChart().x(function (d) {
+                    return d.label
+                }).y(function (d) {
+                    return d.value
+                }).staggerLabels(true).tooltips(false).showValues(true)
+                d3.select('#barChartKartice svg').datum(podaciNovi).transition().duration(500).call(chart);
+                nv.utils.windowResize(chart.update);
+                return chart;
+            });
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    }
+]);
+
+Controllers.controller('najkoristenijeKarticeKorisniciCtrl', [
+    '$scope'
+    ,'$http'
+    ,function($scope, $http)
+    {
+        $http({
+            method: 'GET'
+            , url: 'api/najkoristenijeKarticeKorisnici'
+        }).then(function successCallback(response) {
+            $scope.kartice = response.data;
+            nv.addGraph(function () {
+                var chart = nv.models.pieChart().x(function (d) {
+                    return d.label
+                }).y(function (d) {
+                    return d.value
+                }).showLabels(true);
+                d3.select("#pieChartKarticeKorisnici svg").datum($scope.kartice).transition().duration(1200).call(chart);
+                return chart;
+            });
+            var podaciZaBarChart = [];
+            podaciZaBarChart.key = "Cumulative Return";
+            podaciZaBarChart.values = $scope.kartice;
+            console.log(podaciZaBarChart);
+            var podaciNovi = [];
+            podaciNovi.push(podaciZaBarChart);
+            nv.addGraph(function () {
+                var chart = nv.models.discreteBarChart().x(function (d) {
+                    return d.label
+                }).y(function (d) {
+                    return d.value
+                }).staggerLabels(true).tooltips(false).showValues(true)
+                d3.select('#barChartKarticeKorisnici svg').datum(podaciNovi).transition().duration(500).call(chart);
+                nv.utils.windowResize(chart.update);
+                return chart;
+            });
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    }
+]);

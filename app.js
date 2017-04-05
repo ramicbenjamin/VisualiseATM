@@ -17,18 +17,6 @@ var connection = mysql.createConnection({
     , database: 'visualiseatm'
 });
 //Sve rute sa /api/.. su servisi koji se ispostavljaju
-//TESTIRANJE BAZE PODATAKA
-app.get('/api/TEST', function (req, res) {
-        //res.send("<h1>@ramicbenjamin<h1>");
-        //connection.connect();
-        connection.query('INSERT INTO bankomat (identifikator, lozinka, kolicinaNovca, lokacija, longitude, latitude) VALUES ("novi", "000", "1500", "sarajevo", "22.5", "32.6")', function (error, results, fields) {
-            if (error) {
-                connection.end();
-                throw error;
-            }
-            res.send(results);
-        });
-    })
 //DAJ SVE KORISNIKE
 app.get('/api/dajSveKorisnike', function (req, res) {
         var rezultati = 0;
@@ -53,12 +41,26 @@ app.get('/api/dajSveTipoveKartica', function (req, res) {
     })
     //DodajKorisnika
 app.post('/api/dodajKorisnika', function (req, res) {
-        console.log(req.body.ime);
         connection.query('INSERT INTO korisnik (ime, prezime, korisnickoIme, lozinka) VALUES ("' + req.body.ime + '", "' + req.body.prezime + '", "' + req.body.korisnickoIme + '", "' + req.body.lozinka + '")', function (error, results, fields) {
             if (error) {
                 connection.end();
                 throw error;
             }
+            if(req.body.admin)
+                {
+                  connection.query('SELECT MAX(idKorisnik) AS idNovog FROM korisnik', function (error, results, fields) {
+                        if (error) {
+                            connection.end();
+                            throw error;
+                        }
+                        connection.query('INSERT INTO uloga_korisnik (Uloga_idUloga, Korisnik_idKorisnik) VALUES (1, '+results[0].idNovog+')', function (error, results, fields) {
+                        if (error) {
+                            connection.end();
+                            throw error;
+                        }
+                        });
+                        });
+                }
             res.send(results);
         });
     })
@@ -114,6 +116,36 @@ app.get('/api/dajTopBankomatePoBrojuTransakcija', function (req, res) {
         });
     })
 
+app.get('/api/dajUdjeleKoristenihKartica', function (req, res) {
+        connection.query('SELECT tk.nazivTipa as label, COUNT(tb.TipKartice_idTipKartice) as value FROM tipkartice tk LEFT JOIN tipkartice_bankomat tb ON tb.TipKartice_idTipKartice = tk.idTipKartice GROUP BY tb.TipKartice_idTipKartice ORDER BY COUNT(tb.TipKartice_idTipKartice)', function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+
+app.get('/api/najkoristenijeKarticeKorisnici', function (req, res) {
+        connection.query('SELECT tk.nazivTipa as label, COUNT(kr.TipKartice_idTipKartice) as value FROM tipkartice tk LEFT JOIN kartica kr ON kr.TipKartice_idTipKartice = tk.idTipKartice GROUP BY kr.TipKartice_idTipKartice', function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+
+app.get('/api/dajSveTransakcijeSaImenima', function (req, res) {
+        connection.query('SELECT b.identifikator, k.ime, k.prezime, t.kolicinaNovca, DATE_FORMAT(t.datumTransakcije,"%b %d %Y %h:%i %p") as datumTransakcije FROM bankomat b, korisnik k, transakcija t, kartica kr, racun r WHERE b.idBankomat = t.Bankomat_idBankomat AND kr.idKartica = t.Kartica_idKartica AND r.Kartica_idKartica = kr.idKartica AND k.idKorisnik = r.Korisnik_idKorisnik', function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+
 app.get('/api/dajSveTransakcijeSaBankomata/:id', function (req, res) {
         connection.query('SELECT DATE_FORMAT(transakcija.datumTransakcije,"%b %d %Y %h:%i %p") as label, transakcija.kolicinaNovca as value FROM transakcija WHERE transakcija.Bankomat_idBankomat =' + req.params.id, function (error, results, fields) {
             if (error) {
@@ -130,12 +162,45 @@ app.post('/api/dodajBankomat', function (req, res) {
                 connection.end();
                 throw error;
             }
+            
+            var idNovogBankomata = 1 + results[0].lastID;
             var identifikator = req.body.lokacija + " - " + results[0].lastID;
             connection.query('INSERT INTO bankomat (identifikator, lozinka, kolicinaNovca, lokacija, longitude, latitude) VALUES ("' + identifikator + '", "' + req.body.lozinka + '", "' + req.body.kolicinaNovca + '", "' + req.body.lokacija + '", "' + req.body.lng + '", "' + req.body.lat + '")', function (error, results, fields) {
                 if (error) {
                     connection.end();
                     throw error;
                 }
+                //kadJeDodanBankomat
+                        if(req.body.Maestro)
+                        {
+                            connection.query('INSERT INTO tipkartice_bankomat (TipKartice_idTipKartice, Bankomat_idBankomat) VALUES (1, '+idNovogBankomata+')', function (error, results, fields) {
+                        if (error) {
+                            connection.end();
+                            throw error;
+                        }
+                        
+                        });
+                    }
+                if(req.body.MasterCard)
+                        {
+                            connection.query('INSERT INTO tipkartice_bankomat (TipKartice_idTipKartice, Bankomat_idBankomat) VALUES (3, '+idNovogBankomata+')', function (error, results, fields) {
+                        if (error) {
+                            connection.end();
+                            throw error;
+                        }
+                        
+                        });
+                    }
+                if(req.body.Visa)
+                        {
+                            connection.query('INSERT INTO tipkartice_bankomat (TipKartice_idTipKartice, Bankomat_idBankomat) VALUES (5, '+idNovogBankomata+')', function (error, results, fields) {
+                        if (error) {
+                            connection.end();
+                            throw error;
+                        }
+                        
+                        });
+                    }
                 res.send(results);
             });
         });

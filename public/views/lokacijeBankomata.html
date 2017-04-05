@@ -25,7 +25,7 @@
 <h3 class="center">Svi bankomati na mapi:</h3>
 <ng-map zoom="5" center="[44.409477, 18.524855]">
       <marker ng-repeat="p in bankomati"
-        position="{{p.latitude +' '+p.longitude}}"
+        position="{{p.latitude +','+p.longitude}}"
         data="{{p.identifikator}}"
         title="pos: {{p.lokacija}}"
         id="marker{{p.identifikator}}"
