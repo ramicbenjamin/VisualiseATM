@@ -155,6 +155,16 @@ app.get('/api/dajSveTransakcijeSaBankomata/:id', function (req, res) {
             res.send(results);
         });
     })
+
+app.get('/api/dajKolicinuDostupnihNovcanica/:id', function (req, res) {
+        connection.query('SELECT desetKM, dvadesetKM, pedesetKM, stotinuKM, dvijestotineKM FROM bankomat WHERE idBankomat = ' + req.params.id, function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
     //DodavanjeBankomata
 app.post('/api/dodajBankomat', function (req, res) {
         connection.query('SELECT MAX(idBankomat) AS lastID FROM bankomat', function (error, results, fields) {

@@ -51,6 +51,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: '/topBankomatiPoBrojuTransakcija'
         , templateUrl: 'views/topBankomatiPoBrojuTransakcija.html'
         , controller: 'topBankomatiPoBrojuTransakcijaCtrl'
+    }).state('stanjeNovcanica', {
+        url: '/stanjeNovcanica'
+        , templateUrl: 'views/stanjeNovcanica.html'
+        , controller: 'stanjeNovcanicaCtrl'
     }).state('udjeliKoristenihKartica', {
         url: '/udjeliKoristenihKartica'
         , templateUrl: 'views/udjeliKoristenihKartica.html'

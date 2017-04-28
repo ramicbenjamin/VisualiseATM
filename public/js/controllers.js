@@ -562,3 +562,50 @@ Controllers.controller('najkoristenijeKarticeKorisniciCtrl', [
         });
     }
 ]);
+
+Controllers.controller('stanjeNovcanicaCtrl', [
+    '$scope'
+    ,'$http'
+    ,function($scope, $http){
+        
+     $http({
+            method: 'GET'
+            , url: '/api/dajSveBankomate'
+        }).then(function successCallback(response) {
+            $scope.bankomati = response.data;
+        }, function errorCallback(response) {
+            console.log(response);
+        });    
+        
+        $scope.selektujBankomat = function()
+        {
+                  $http({
+            method: 'GET'
+            , url: '/api/dajKolicinuDostupnihNovcanica/' + $scope.bankomat.idBankomat
+        }).then(function successCallback(response) {
+            $scope.trenutnoStanje = response.data;    
+            var podaciZaBarChart = [];
+            //pripremaPodataka
+            var stanjeUBankomatuTrenutno = [ {"label" : "10 KM" , "value" : $scope.trenutnoStanje[0].desetKM} ,{"label" : "20 KM" , "value" : $scope.trenutnoStanje[0].dvadesetKM},{"label" : "50 KM" , "value" : $scope.trenutnoStanje[0].pedesetKM},{"label" : "100 KM" , "value" : $scope.trenutnoStanje[0].stotinuKM},{"label" : "200 KM" , "value" : $scope.trenutnoStanje[0].dvijestotineKM}];
+            podaciZaBarChart.key = "Nesto";
+            var ogranicenjaKaseta = [ {"label" : "10 KM" , "value" : 100} ,{"label" : "20 KM" , "value" : 100},{"label" : "50 KM" , "value" : 100},{"label" : "100 KM" , "value" : 100},{"label" : "200 KM" , "value" : 100}];
+            podaciZaBarChart.values = ogranicenjaKaseta.concat(stanjeUBankomatuTrenutno);
+            console.log(podaciZaBarChart);
+            var podaciNovi = [];
+            podaciNovi.push(podaciZaBarChart);
+            nv.addGraph(function () {
+                var chart = nv.models.discreteBarChart().x(function (d) {
+                    return d.label
+                }).y(function (d) {
+                    return d.value
+                }).staggerLabels(true).tooltips(false).showValues(true)
+                d3.select('#stanjeNovcanica svg').datum(podaciNovi).transition().duration(500).call(chart);
+                nv.utils.windowResize(chart.update);
+                return chart;
+            });
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+        }
+    }
+])
