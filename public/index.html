@@ -22,46 +22,12 @@
     </head>
 
 <body ng-app="VisualiseATM">
-    <div class="navbar-fixed">
-        <nav class="hide-on-large-only">
-            <div class="nav-wrapper red"> <a href="#!" class="brand-logo">Visualise ATM</a>
-                <ul class="left ">
-                    <li> <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a></li>
-                </ul>
-            </div>
-        </nav>
-    </div>
-    <ul id="slide-out" class="side-nav fixed red">
-        <h4 class="center"><span class="white-text">Visualise ATM</span></h4></div>
-        <li><a ui-sref="home">Početna</a></li>
-        <li><a ui-sref="dodavanjeBankomata">Dodavanje bankomata</a></li>
-        <li><a ui-sref="dodavanjeKorisnika">Dodavanje korisnika</a></li>
-        <li><a ui-sref="kreiranjeRacuna">Kreiranje računa</a></li>
-        <li><a ui-sref="izmjenaBankomata">Punjenje bankomata</a></li>
-        <li><a ui-sref="izmjenaKorisnika">Izmjena korisnika</a></li>
-        <h5 class="center"><span class="white-text">Pregledi</span></h5></div>
-        <li><a ui-sref="lokacijeBankomata">Pregled bankomata</a></li>
-        <li><a ui-sref="stanjeNovcanica">Stanje novčanica</a></li>
-        <li><a ui-sref="udjeliKoristenihKartica">Udjeli korištenih kartica</a></li>
-        <li><a ui-sref="najkoristenijeKarticeKorisnici">Najkorištenije kartice</a></li>
-        <li><a ui-sref="pregledTransakcija">Pregled transakcija</a></li>
-        <li><a ui-sref="topPetTransakcija">Top 5 transakcija</a></li>
-        <li><a ui-sref="topBankomatiPoBrojuTransakcija">Top bankomati</a></li>
-        <li><a ui-sref="poredjenjeDvaBankomata">Poređenje transakcija</a></li>
-        <li><a ui-sref="sveTransakcijeZaBankomat">Sve transakcije za bankomat</a></li>
-        <li><a ui-sref="#" class="center white-text">ODJAVA</a></li>
-    </ul>
-    <div class="container">
-        <main>
+    
             <div ui-view></div>
-        </main>
-    </div>
+
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
-    <script>
-        $(".button-collapse").sideNav();
-    </script>
 </body>
 
 </html>

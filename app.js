@@ -17,6 +17,18 @@ var connection = mysql.createConnection({
     , database: 'visualiseatm'
 });
 //Sve rute sa /api/.. su servisi koji se ispostavljaju
+
+app.post('/api/login', function (req, res) {
+        var rezultati = 0;
+        connection.query('SELECT u.uloga, k.korisnickoIme FROM uloga u, korisnik k, uloga_korisnik uk WHERE k.idKorisnik = uk.Korisnik_idKorisnik and u.idUloga = uk.Uloga_idUloga and k.korisnickoIme = "'+req.body.uname+'" and k.lozinka = "'+req.body.psw+'"', function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+
 //DAJ SVE KORISNIKE
 app.get('/api/dajSveKorisnike', function (req, res) {
         var rezultati = 0;
@@ -137,7 +149,7 @@ app.get('/api/najkoristenijeKarticeKorisnici', function (req, res) {
     })
 
 app.get('/api/dajSveTransakcijeSaImenima', function (req, res) {
-        connection.query('SELECT b.identifikator, k.ime, k.prezime, t.kolicinaNovca, DATE_FORMAT(t.datumTransakcije,"%b %d %Y %h:%i %p") as datumTransakcije FROM bankomat b, korisnik k, transakcija t, kartica kr, racun r WHERE b.idBankomat = t.Bankomat_idBankomat AND kr.idKartica = t.Kartica_idKartica AND r.Kartica_idKartica = kr.idKartica AND k.idKorisnik = r.Korisnik_idKorisnik', function (error, results, fields) {
+        connection.query('SELECT k.ime, k.prezime, b.identifikator, DATE_FORMAT(t.datumTransakcije,"%b %d %Y %h:%i %p") as datumTransakcije, t.kolicinaNovca from korisnik k, bankomat b, racun r, transakcija t, kartica kr where b.idBankomat = t.Bankomat_idBankomat and kr.idKartica = t.Kartica_idKartica and r.Kartica_idKartica = kr.idKartica', function (error, results, fields) {
             if (error) {
                 connection.end();
                 throw error;

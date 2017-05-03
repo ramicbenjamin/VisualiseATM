@@ -6,79 +6,89 @@ var app = angular.module("VisualiseATM", [
 , 'ngMap']);
 //Angular rutiranje
 app.config(function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/home');
-    $stateProvider.state('home', {
+    $urlRouterProvider.otherwise('/login');
+    $stateProvider.state('dashboard', {
+        url: '/dashboard'
+        , templateUrl: 'dashboard.html'
+        , controller: 'dashboardCtrl'
+    }).state('dashboard.home', {
         url: '/home'
         , templateUrl: 'views/home.html'
         , controller: 'HomeCtrl'
-    }).state('dodavanjeBankomata', {
+    }).state('login', {
+        url: '/login'
+        , templateUrl: 'login.html'
+        , controller: 'loginCtrl'
+    })
+        
+        .state('dashboard.dodavanjeBankomata', {
         url: '/dodavanjeBankomata'
         , templateUrl: 'views/dodavanjeBankomata.html'
         , controller: 'dodavanjeBankomataCtrl'
-    }).state('izmjenaBankomata', {
+    }).state('dashboard.izmjenaBankomata', {
         url: '/izmjenaBankomata'
         , templateUrl: 'views/izmjenaBankomata.html'
         , controller: 'izmjenaBankomataCtrl'
-    }).state('izmjenaBankomata.detalj', {
+    }).state('dashboard.izmjenaBankomata.detalj', {
         url: "/:bankomatID",
         templateUrl: 'views/detaljBankomata.html',
         controller: 'izmjenaBankomataDetaljCtrl'
-    }).state('izmjenaKorisnika', {
+    }).state('dashboard.izmjenaKorisnika', {
         url: '/izmjenaKorisnika'
         , templateUrl: 'views/izmjenaKorisnika.html'
         , controller: 'izmjenaKorisnikaCtrl'
-    }).state('izmjenaKorisnika.detalji', {
+    }).state('dashboard.izmjenaKorisnika.detalji', {
         url: "/:korisnikID/:racunID",
         templateUrl: 'views/detaljKorisnika.html',
         controller: 'izmjenaKorisnikaDetaljCtrl'
-    }).state('kreiranjeRacuna', {
+    }).state('dashboard.kreiranjeRacuna', {
         url: '/kreiranjeRacuna'
         , templateUrl: 'views/kreiranjeRacuna.html'
         , controller: 'kreiranjeRacunaCtrl'
-    }).state('dodavanjeKorisnika', {
+    }).state('dashboard.dodavanjeKorisnika', {
         url: '/dodavanjeKorisnika'
         , templateUrl: 'views/dodavanjeKorisnika.html'
         , controller: 'dodavanjeKorisnikaCtrl'
-    }).state('lokacijeBankomata', {
+    }).state('dashboard.lokacijeBankomata', {
         url: '/lokacijeBankomata'
         , templateUrl: 'views/lokacijeBankomata.html'
         , controller: 'lokacijeBankomataCtrl'
-    }).state('topPetTransakcija', {
+    }).state('dashboard.topPetTransakcija', {
         url: '/topPetTransakcija'
         , templateUrl: 'views/topPetTransakcija.html'
         , controller: 'topPetTransakcijaCtrl'
-    }).state('topBankomatiPoBrojuTransakcija', {
+    }).state('dashboard.topBankomatiPoBrojuTransakcija', {
         url: '/topBankomatiPoBrojuTransakcija'
         , templateUrl: 'views/topBankomatiPoBrojuTransakcija.html'
         , controller: 'topBankomatiPoBrojuTransakcijaCtrl'
-    }).state('stanjeNovcanica', {
+    }).state('dashboard.stanjeNovcanica', {
         url: '/stanjeNovcanica'
         , templateUrl: 'views/stanjeNovcanica.html'
         , controller: 'stanjeNovcanicaCtrl'
-    }).state('udjeliKoristenihKartica', {
+    }).state('dashboard.udjeliKoristenihKartica', {
         url: '/udjeliKoristenihKartica'
         , templateUrl: 'views/udjeliKoristenihKartica.html'
         , controller: 'udjeliKoristenihKarticaCtrl'
-    }).state('najkoristenijeKarticeKorisnici', {
+    }).state('dashboard.najkoristenijeKarticeKorisnici', {
         url: '/najkoristenijeKarticeKorisnici'
         , templateUrl: 'views/najkoristenijeKarticeKorisnici.html'
         , controller: 'najkoristenijeKarticeKorisniciCtrl'
-    }).state('poredjenjeDvaBankomata', {
+    }).state('dashboard.poredjenjeDvaBankomata', {
         url: '/poredjenjeDvaBankomata'
         , templateUrl: 'views/poredjenjeDvaBankomata.html'
         , controller: 'poredjenjeDvaBankomataCtrl'
-    }).state('sveTransakcijeZaBankomat', {
+    }).state('dashboard.sveTransakcijeZaBankomat', {
         url: '/sveTransakcijeZaBankomat'
         , templateUrl: 'views/sveTransakcijeZaBankomat.html'
         , controller: 'sveTransakcijeZaBankomatCtrl'
-    }).state('pregledTransakcija', {
+    }).state('dashboard.pregledTransakcija', {
         url: '/pregledTransakcija'
         , templateUrl: 'views/pregledTransakcija.html'
         , controller: 'pregledTransakcijaCtrl'
-    }).state('about.prvi', {
+    }).state('dashboard.about.prvi', {
         url: '/prvi'
         , templateUrl: 'views/prvi.html'
-    }).state('about.drugi', {
+    }).state('dashboard.about.drugi', {
         url: '/drugi'
         , templateUrl: 'views/drugi.html'
     })

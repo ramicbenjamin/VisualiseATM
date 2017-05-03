@@ -7,9 +7,70 @@ Controllers.controller('HomeCtrl', [
     , '$http'
     , 'NgMap'
     , function ($scope, $location, $cookies, $rootScope, $http, NgMap) {
-
+        if(typeof($cookies.get("logiraniKorisnik")) == "undefined")
+           $location.path("/login"); 
     }
 ]);
+
+Controllers.controller('loginCtrl', [
+    '$scope',
+    '$cookies',
+    '$http',
+    '$location',
+    function($scope, $cookies, $http, $location)
+    {
+        $scope.errmsg = "";
+      $scope.tryLogin = function()
+      {
+         if($scope.uname.length > 0 && $scope.pw.length > 0)
+             {
+                 $http({
+                    method: 'post'
+                    , url: '/api/login'
+                     , data : {uname : $scope.uname, psw : $scope.pw}
+                }).then(function successCallback(response) {
+                  if(response.data.length == 1)
+                      {
+                      $cookies.put("logiraniKorisnik", response.data[0].korisnickoIme)
+                      $scope.errmsg = "";
+                      $location.path("/dashboard/home");    
+                      }else if(response.data.length == 0)
+                          {
+                              $scope.errmsg = "Neispravni podaci";
+                             console.log("Neispravni podaci");
+                          }
+                      else
+                          {
+                              console.log("neki Belaj");
+                          }
+                }, function errorCallback(response) {
+                    console.log("nije prosao");
+                });
+                     }
+      }
+       if(typeof($cookies.get("logiraniKorisnik")) != "undefined")
+           $location.path("/dashboard"); 
+    }
+]);
+
+Controllers.controller('dashboardCtrl', [
+    '$scope',
+    '$cookies',
+    '$http',
+    '$location',
+    function($scope, $cookies, $http, $location)
+    {
+        if(typeof($cookies.get("logiraniKorisnik")) == "undefined")
+           $location.path("/login"); 
+        
+        $scope.korisnickoIme = $cookies.get("logiraniKorisnik");
+        $scope.odjava = function()
+        {
+            $cookies.remove("logiraniKorisnik");
+            $location.path("/login");
+        }
+    }
+])
 
 
 //VIZUALIZACIJE CTRL
@@ -73,7 +134,7 @@ Controllers.controller('dodavanjeBankomataCtrl', [
                 , url: '/api/dodajBankomat'
             }).then(function successCallback(response) {
                 console.log(response);
-                $location.url('/lokacijeBankomata');
+                $location.url('dashboard/lokacijeBankomata');
             }, function errorCallback(response) {
                 console.log(response);
             });
@@ -193,7 +254,7 @@ Controllers.controller('izmjenaBankomataCtrl', [
             console.log(response);
         });
         $scope.ispisiBankomat = function () {
-            var editLink = '/izmjenaBankomata/' + $scope.bankomat.idBankomat;
+            var editLink = 'dashboard/izmjenaBankomata/' + $scope.bankomat.idBankomat;
             $location.path(editLink);
         }
     }
@@ -268,7 +329,7 @@ Controllers.controller('izmjenaKorisnikaCtrl', [
             });
         }
         $scope.ispisiDetaljeRacuna = function () {
-            var editLink = '/izmjenaKorisnika/' + $scope.korisnik.idKorisnik + "/" + $scope.racun.idRacun;
+            var editLink = 'dashboard/izmjenaKorisnika/' + $scope.korisnik.idKorisnik + "/" + $scope.racun.idRacun;
             $location.path(editLink);
         }
     }

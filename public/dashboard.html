@@ -1,0 +1,39 @@
+    <div class="navbar-fixed">
+        <nav class="hide-on-large-only">
+            <div class="nav-wrapper red"> <a href="#!" class="brand-logo">Visualise ATM</a>
+                <ul class="left ">
+                    <li> <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <ul id="slide-out" class="side-nav fixed red">
+        <h4 class="center"><span class="white-text">Visualise ATM</span></h4></div>
+        <h6 class="center"><span class="white-text">Prijavljeni kao {{korisnickoIme}}</span></h6></div>
+        <li><a ui-sref="dashboard.home">Početna</a></li>
+        <li><a ui-sref="dashboard.dodavanjeBankomata">Dodavanje bankomata</a></li>
+        <li><a ui-sref="dashboard.dodavanjeKorisnika">Dodavanje korisnika</a></li>
+        <li><a ui-sref="dashboard.kreiranjeRacuna">Kreiranje računa</a></li>
+        <li><a ui-sref="dashboard.izmjenaBankomata">Punjenje bankomata</a></li>
+        <li><a ui-sref="dashboard.izmjenaKorisnika">Izmjena korisnika</a></li>
+        <h5 class="center"><span class="white-text">Pregledi</span></h5></div>
+        <li><a ui-sref="dashboard.lokacijeBankomata">Pregled bankomata</a></li>
+        <li><a ui-sref="dashboard.stanjeNovcanica">Stanje novčanica</a></li>
+        <li><a ui-sref="dashboard.udjeliKoristenihKartica">Udjeli korištenih kartica</a></li>
+        <li><a ui-sref="dashboard.najkoristenijeKarticeKorisnici">Najkorištenije kartice</a></li>
+        <li><a ui-sref="dashboard.pregledTransakcija">Pregled transakcija</a></li>
+        <li><a ui-sref="dashboard.topPetTransakcija">Top 5 transakcija</a></li>
+        <li><a ui-sref="dashboard.topBankomatiPoBrojuTransakcija">Top bankomati</a></li>
+        <li><a ui-sref="dashboard.poredjenjeDvaBankomata">Poređenje transakcija</a></li>
+        <li><a ui-sref="dashboard.sveTransakcijeZaBankomat">Sve transakcije za bankomat</a></li>
+        <li><a class="center white-text" ng-click = "odjava()" style="cursor: pointer">ODJAVA</a></li>
+    </ul>
+    <div class="container">
+        <main>
+            <div ui-view></div>
+        </main>
+    </div>
+    
+    <script>
+        $(".button-collapse").sideNav();
+    </script>
