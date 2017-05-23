@@ -238,9 +238,28 @@ app.get('/api/dajSveBankomate', function (req, res) {
         });
     })
 
+app.get('/api/dajSveNaziveBankomata', function (req, res) {
+        connection.query('SELECT identifikator FROM bankomat', function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
     //DAJBANKOMAT SA SPECIF ID
 app.get('/api/dajBankomat/:id', function (req, res) {
         connection.query('SELECT * FROM bankomat WHERE idBankomat = '  + req.params.id, function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+
+app.get('/api/dajIdKartice/:brojKartice/:PINkartice', function (req, res) {
+        connection.query('SELECT kartica.idKartica FROM kartica WHERE kartica.brojKartice = '  + req.params.brojKartice + ' and kartica.PIN = '+req.params.PINkartice, function (error, results, fields) {
             if (error) {
                 connection.end();
                 throw error;
@@ -271,6 +290,16 @@ app.post('/api/promijeniStanjeRacuna', function (req, res) {
 
 app.get('/api/dajSveRacune/:id', function (req, res) {
         connection.query('SELECT * FROM racun WHERE Korisnik_idKorisnik = ' + req.params.id, function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+
+app.get('/api/dajStanjeRacuna/:idKartice', function (req, res) {
+        connection.query('SELECT racun.kolicinaNovca FROM racun WHERE racun.Kartica_idKartica = ' + req.params.idKartice, function (error, results, fields) {
             if (error) {
                 connection.end();
                 throw error;

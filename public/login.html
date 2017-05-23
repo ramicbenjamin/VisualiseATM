@@ -63,15 +63,15 @@ span.psw {
 }
 </style>
 
+<h1 class="center">Visualise ATM Login</h1>
 <form>
-    <h6>{{errmsg}}</h6>
   <div class="container">
-    <label><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required ng-model="uname">
+    <label><b>Korisničko ime</b></label>
+    <input type="text" placeholder="Ukucajte korisnicko ime" name="uname" required ng-model="uname">
 
-    <label><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required ng-model="pw">
-        
+    <label><b>Lozinka</b></label>
+    <input type="password" placeholder="Ukucajte lozinku" name="psw" required ng-model="pw">
+        <h6 class = "center red-text">{{errmsg}}</h6>    
     <button type="submit" ng-click="tryLogin()">Login</button>
   </div>
 </form>
