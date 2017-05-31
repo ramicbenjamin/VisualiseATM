@@ -177,6 +177,36 @@ app.get('/api/dajKolicinuDostupnihNovcanica/:id', function (req, res) {
             res.send(results);
         });
     })
+
+app.get('/api/digniNovacSaBankomata/:id/:kolicina', function (req, res) {
+        connection.query('UPDATE bankomat b SET b.kolicinaNovca = b.kolicinaNovca - '+req.params.kolicina+' WHERE b.idBankomat = ' + req.params.id, function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+
+app.get('/api/upisiNovuTransakciju/:idKartica/:idBankomat/:kolicina', function (req, res) {
+        connection.query('INSERT INTO transakcija (idTransakcija, Kartica_idKartica, Bankomat_idBankomat, kolicinaNovca, datumTransakcije) VALUES (NULL, '+req.params.idKartica+', '+req.params.idBankomat+', '+req.params.kolicina+', CURRENT_TIMESTAMP)', function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
+
+app.get('/api/skiniNovacSaRacuna/:idKartica/:kolicina', function (req, res) {
+        connection.query('UPDATE racun r SET r.kolicinaNovca = r.kolicinaNovca - '+req.params.kolicina+' WHERE r.Kartica_idKartica =' + req.params.idKartica, function (error, results, fields) {
+            if (error) {
+                connection.end();
+                throw error;
+            }
+            res.send(results);
+        });
+    })
     //DodavanjeBankomata
 app.post('/api/dodajBankomat', function (req, res) {
         connection.query('SELECT MAX(idBankomat) AS lastID FROM bankomat', function (error, results, fields) {
@@ -239,7 +269,7 @@ app.get('/api/dajSveBankomate', function (req, res) {
     })
 
 app.get('/api/dajSveNaziveBankomata', function (req, res) {
-        connection.query('SELECT identifikator FROM bankomat', function (error, results, fields) {
+        connection.query('SELECT idBankomat, identifikator FROM bankomat', function (error, results, fields) {
             if (error) {
                 connection.end();
                 throw error;
