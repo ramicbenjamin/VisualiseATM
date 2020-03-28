@@ -1,9 +1,13 @@
-# Visualise ATM - Practical part of Bachelor's Degree work
+# Visualise ATM 
+###  This app is as a part of practical part of Bachelor's Degree work. 
 
-###  This app is created for a learning purpose. It uses MEVN stack:
+It uses this stack:
+
 #### Backend:
 - Node JS
+- Express
 - MySQL
+
 #### Frontend:
 - Angular JS
 - Materialize CSS
