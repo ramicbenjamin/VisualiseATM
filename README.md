@@ -1,3 +1,9 @@
+> [!NOTE]
+> If you’re coming across this repository years after its creation — please note that my engineering approach and skills have evolved over time.  
+> I keep this project online as part of my learning journey.  
+> For learning purposes, this repository uses the **Bosnian language**.  
+> You can explore my more recent work at [ramicbenjamin.github.io](https://ramicbenjamin.github.io/).
+
 # Visualise ATM 
 ###  This app is as a part of practical part of Bachelor's Degree work. 
 
